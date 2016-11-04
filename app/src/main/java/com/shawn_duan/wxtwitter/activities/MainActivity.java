@@ -14,6 +14,7 @@ import android.view.MenuItem;
 
 import com.shawn_duan.wxtwitter.R;
 import com.shawn_duan.wxtwitter.fragments.ComposeTweetDialogFragment;
+import com.shawn_duan.wxtwitter.fragments.TabAndPagerFragment;
 import com.shawn_duan.wxtwitter.fragments.TimeLineFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        pushFragment(new TimeLineFragment(), false);
+        pushFragment(new TabAndPagerFragment(), false);
     }
 
     @Override
