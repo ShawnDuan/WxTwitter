@@ -7,6 +7,7 @@ import android.content.Context;
 
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 /*
@@ -51,6 +52,47 @@ public class TwitterClient extends OAuthBaseClient {
 		getClient().get(apiUrl, params, handler);
 	}
 
+	public void getMentionsTimeLine(long sinceId, long maxId, int count, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/mentions_timeline.json");
+		// Specify the params
+		RequestParams params = new RequestParams();
+
+		if (sinceId > 0) {
+			params.put("since_id", sinceId);
+		}
+		if (maxId > 0) {
+			params.put("max_id", maxId - 1);
+		}
+		// unlimited if count = -1
+		if (count > 0) {
+			params.put("count", count);
+		}
+		// Execute the request
+		getClient().get(apiUrl, params, handler);
+	}
+
+	public void getUserTimeline(String screenName, long sinceId, long maxId, int count, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/user_timeline.json");
+		// Specify the params
+		RequestParams params = new RequestParams();
+
+		if (screenName != null && screenName.length() > 0) {
+			params.put("screen_name", screenName);
+		}
+		if (sinceId > 0) {
+			params.put("since_id", sinceId);
+		}
+		if (maxId > 0) {
+			params.put("max_id", maxId - 1);
+		}
+		// unlimited if count = -1
+		if (count > 0) {
+			params.put("count", count);
+		}
+		// Execute the request
+		getClient().get(apiUrl, params, handler);
+	}
+
 	public void composeTweet(String status, AsyncHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/update.json");
 		// Specify the params
@@ -60,12 +102,10 @@ public class TwitterClient extends OAuthBaseClient {
 		getClient().post(apiUrl, params, handler);
 	}
 
-	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
-	 * 	  i.e getApiUrl("statuses/home_timeline.json");
-	 * 2. Define the parameters to pass to the request (query or body)
-	 *    i.e RequestParams params = new RequestParams("foo", "bar");
-	 * 3. Define the request method and make a call to the client
-	 *    i.e client.get(apiUrl, params, handler);
-	 *    i.e client.post(apiUrl, params, handler);
-	 */
+	public void getUserInfo(AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("account/verify_credentials.json");
+		getClient().get(apiUrl, null, handler);
+
+	}
+
 }

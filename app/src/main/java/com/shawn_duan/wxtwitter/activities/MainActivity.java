@@ -1,5 +1,6 @@
 package com.shawn_duan.wxtwitter.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -15,7 +16,6 @@ import android.view.MenuItem;
 import com.shawn_duan.wxtwitter.R;
 import com.shawn_duan.wxtwitter.fragments.ComposeTweetDialogFragment;
 import com.shawn_duan.wxtwitter.fragments.TabAndPagerFragment;
-import com.shawn_duan.wxtwitter.fragments.TimeLineFragment;
 
 public class MainActivity extends AppCompatActivity {
     private final static String TAG = MainActivity.class.getSimpleName();
@@ -62,7 +62,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_profile) {
+            Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+//            intent.
+            startActivity(intent);
             return true;
         }
 

@@ -5,7 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.shawn_duan.wxtwitter.fragments.TimeLineFragment;
+import com.shawn_duan.wxtwitter.fragments.HomeTimelineFragment;
+import com.shawn_duan.wxtwitter.fragments.MentionsTimelineFragment;
 
 /**
  * Created by sduan on 11/3/16.
@@ -13,7 +14,7 @@ import com.shawn_duan.wxtwitter.fragments.TimeLineFragment;
 
 public class TimelineFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    private String tabTitles[] = new String[] { "HomeTimeline", "Mentioned"};
+    private String tabTitles[] = new String[] { "Home", "Mentions"};
     final int PAGE_COUNT = tabTitles.length;
 
     private Context context;
@@ -32,9 +33,9 @@ public class TimelineFragmentPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new TimeLineFragment();
+                return new HomeTimelineFragment();
             case 1:
-                return new TimeLineFragment();
+                return new MentionsTimelineFragment();
             default:
                 return null;
         }

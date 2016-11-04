@@ -41,7 +41,7 @@ import cz.msebera.android.httpclient.Header;
 public class ComposeTweetDialogFragment extends DialogFragment {
     private final static String TAG = ComposeTweetDialogFragment.class.getSimpleName();
 
-    private MainActivity mActivity;
+//    private MainActivity mActivity;
     private TwitterClient mClient;
 
     @BindView(R.id.etComposeBody)
@@ -59,7 +59,7 @@ public class ComposeTweetDialogFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mClient = WxTwitterApplication.getRestClient();     // singleton client
-        mActivity = (MainActivity) getActivity();
+//        mActivity = (MainActivity) getActivity();
 
         mSharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
         draft = mSharedPreferences.getString(getString(R.string.compose_draft), "");
@@ -86,9 +86,11 @@ public class ComposeTweetDialogFragment extends DialogFragment {
                     Tweet newTweet = Tweet.fromJSONObject(response);
                     draft = "";
 
-                    mActivity.onBackPressed();
-                    Snackbar.make(mActivity.mToolbar, "Tweet submitted successfully!", Snackbar.LENGTH_LONG)
+                    Snackbar.make(etComposeBody, "Tweet submitted successfully!", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
+
+                    getActivity().onBackPressed();
+
                     RxBus.getInstance().post(new InsertNewTweetEvent(newTweet));
                 }
 

@@ -2,35 +2,19 @@ package com.shawn_duan.wxtwitter.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.shawn_duan.wxtwitter.WxTwitterApplication;
-import com.shawn_duan.wxtwitter.R;
-import com.shawn_duan.wxtwitter.adapters.TweetsArrayAdapter;
 import com.shawn_duan.wxtwitter.models.Tweet;
 import com.shawn_duan.wxtwitter.network.TwitterClient;
 import com.shawn_duan.wxtwitter.rxbus.InsertNewTweetEvent;
 import com.shawn_duan.wxtwitter.rxbus.RxBus;
-import com.shawn_duan.wxtwitter.utils.DividerItemDecoration;
-import com.shawn_duan.wxtwitter.utils.EndlessRecyclerViewScrollListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import cz.msebera.android.httpclient.Header;
 import rx.Subscription;
 import rx.functions.Action1;
@@ -39,29 +23,15 @@ import rx.functions.Action1;
  * Created by sduan on 10/29/16.
  */
 
-public class TimeLineFragment extends Fragment {
-    private final static String TAG = TimeLineFragment.class.getSimpleName();
+public class HomeTimelineFragment extends TweetsListBaseFragment {
+    private final static String TAG = HomeTimelineFragment.class.getSimpleName();
 
-    private TwitterClient mClient;
 
-    @BindView(R.id.swipContainer)
-    SwipeRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.rcTimeLine)
-    RecyclerView mRecyclerView;
-    private ArrayList<Tweet> mTweetList;
-    private TweetsArrayAdapter mAdapter;
-    private long mNewestId, mOldestId;
-    private Unbinder unbinder;
     private Subscription mNewTweetSubscription;
-
-    private final static int NORMAL_POPULATE_AMOUNT = 25;
-    private final static long NOT_APPLICABLE = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mClient = WxTwitterApplication.getRestClient();     // singleton client
-        mTweetList = new ArrayList<>();
 
         mNewTweetSubscription = RxBus.getInstance().toObserverable(InsertNewTweetEvent.class)
                 .subscribe(new Action1<InsertNewTweetEvent>() {
@@ -80,41 +50,6 @@ public class TimeLineFragment extends Fragment {
                 });
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView()");
-
-        View view = inflater.inflate(R.layout.fragment_timeline, container, false);
-        unbinder = ButterKnife.bind(this, view);
-
-        setupRecyclerView();
-
-        // only do auto-refresh at the first time.
-        if (mTweetList.size() == 0) {
-            populateTimeline(mNewestId, NOT_APPLICABLE, (int) NOT_APPLICABLE);
-        }
-
-        return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume()");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause()");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 
     @Override
     public void onDestroy() {
@@ -125,7 +60,7 @@ public class TimeLineFragment extends Fragment {
     }
 
     // if count is -1 or 0, populate as much as possible in the range of sinceId to maxId.
-    private void populateTimeline(long sinceId, final long maxId, int count) {
+    protected void populateTimeline(final long sinceId, final long maxId, final int count) {
 
         Log.d(TAG, "populateTimeLine(), sinceId: " + sinceId + ", maxId: " + maxId + ", count: " + count);
         mClient.getHomeTimeLine(sinceId, maxId, count, new JsonHttpResponseHandler() {
@@ -176,36 +111,4 @@ public class TimeLineFragment extends Fragment {
         });
     }
 
-    private void populateTimeline() {
-        populateTimeline(0, 0, 0);
-    }
-
-    private void setupRecyclerView() {
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                populateTimeline(mNewestId, NOT_APPLICABLE, (int) NOT_APPLICABLE);
-            }
-        });
-        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-        mAdapter = new TweetsArrayAdapter(getActivity(), mTweetList);
-        mRecyclerView.setAdapter(mAdapter);
-        RecyclerView.ItemDecoration itemDecoration = new
-                DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST);
-        mRecyclerView.addItemDecoration(itemDecoration);
-
-        mRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                Log.d(TAG, "onLoadMore()");
-                populateTimeline(NOT_APPLICABLE, mOldestId, NORMAL_POPULATE_AMOUNT);
-            }
-        });
-    }
 }
