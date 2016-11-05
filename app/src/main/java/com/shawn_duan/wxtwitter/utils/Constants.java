@@ -7,5 +7,6 @@ package com.shawn_duan.wxtwitter.utils;
 public class Constants {
 
     public final static String SCREEN_NAME_KEY = "screenName";
+    public final static String USER_KEY = "user";
 
 }

@@ -18,6 +18,7 @@ import com.shawn_duan.wxtwitter.models.User;
 import com.shawn_duan.wxtwitter.network.TwitterClient;
 
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,6 +27,7 @@ import cz.msebera.android.httpclient.Header;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 import static com.shawn_duan.wxtwitter.utils.Constants.SCREEN_NAME_KEY;
+import static com.shawn_duan.wxtwitter.utils.Constants.USER_KEY;
 
 public class ProfileActivity extends AppCompatActivity {
     private final static String TAG = ProfileActivity.class.getSimpleName();
@@ -33,6 +35,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TwitterClient mClient;
     private Unbinder unbinder;
     private User mUser;
+    private String mScreenName;
 
     public Toolbar mToolbar;
 
@@ -61,29 +64,37 @@ public class ProfileActivity extends AppCompatActivity {
         unbinder = ButterKnife.bind(this);
 
         mClient = WxTwitterApplication.getRestClient();
-        mClient.getUserInfo(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                mUser = User.fromJSONObject(response);
-                getSupportActionBar().setTitle(mUser.getName());
 
-                populateProfileHeader(mUser);
-            }
+        mUser = Parcels.unwrap(getIntent().getParcelableExtra(USER_KEY));
+        // if get user from intent, use it directly; if not, call
+        if (mUser != null) {
+            mScreenName = mUser.getScreenName();
+            updateContent(mUser);
+        } else {
+            mClient.getUserInfo(new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    mUser = User.fromJSONObject(response);
+                    updateContent(mUser);
+                }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
-        });
-
-        String screenName = getIntent().getStringExtra(SCREEN_NAME_KEY);
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                }
+            });
+        }
         if (savedInstanceState == null) {
-            UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(screenName);
+            UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(mScreenName);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.add(R.id.profile_timeline_container, userTimelineFragment);
             ft.commit();
         }
+    }
 
+    private void updateContent(User user) {
+        getSupportActionBar().setTitle(user.getName());
+        populateProfileHeader(user);
     }
 
     @Override

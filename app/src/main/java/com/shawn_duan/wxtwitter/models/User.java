@@ -2,11 +2,13 @@ package com.shawn_duan.wxtwitter.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 /**
  * Created by sduan on 10/29/16.
  */
 
+@Parcel
 public class User {
     private String name;
     private long uid;

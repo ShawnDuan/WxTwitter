@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
 /**
@@ -34,6 +35,7 @@ public class HomeTimelineFragment extends TweetsListBaseFragment {
         super.onCreate(savedInstanceState);
 
         mNewTweetSubscription = RxBus.getInstance().toObserverable(InsertNewTweetEvent.class)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<InsertNewTweetEvent>() {
                     @Override
                     public void call(InsertNewTweetEvent insertNewTweetEvent) {
@@ -42,6 +44,7 @@ public class HomeTimelineFragment extends TweetsListBaseFragment {
                             mTweetList.add(0, tweet);
                             mNewestId = tweet.getUid();
                             mAdapter.notifyItemInserted(0);
+                            mRecyclerView.smoothScrollToPosition(0);
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }

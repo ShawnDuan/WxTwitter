@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pushFragment(new ComposeTweetDialogFragment(), true);
+                addFragment(new ComposeTweetDialogFragment(), true);
             }
         });
 
@@ -76,6 +76,20 @@ public class MainActivity extends AppCompatActivity {
         String name = frag.getClass().getSimpleName();
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.replace(R.id.main_container, frag, name);
+        if (addToBackStack) {
+            transaction.addToBackStack(name);
+        }
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.commit();
+        if (mFragmentManager.getFragments() != null) {
+            Log.d(TAG, "fragment # : " + mFragmentManager.getFragments().size());
+        }
+    }
+
+    private void addFragment(Fragment frag, boolean addToBackStack) {
+        String name = frag.getClass().getSimpleName();
+        FragmentTransaction transaction = mFragmentManager.beginTransaction();
+        transaction.add(R.id.main_container, frag, name);
         if (addToBackStack) {
             transaction.addToBackStack(name);
         }
