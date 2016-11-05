@@ -28,12 +28,12 @@
     <RelativeLayout
         android:id="@+id/profile_header_container"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar_container"
+        android:paddingBottom="10dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_below="@id/toolbar_container">
+        android:paddingTop="10dp">
 
         <ImageView
             android:id="@+id/userAvatar"
@@ -52,11 +52,11 @@
             android:layout_below="@id/userAvatar"
             android:gravity="bottom|left"
             android:maxLines="1"
-            tools:text="userName"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/black"
             android:textSize="15sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            tools:text="userName"/>
 
         <TextView
             android:id="@+id/userAccountName"
@@ -76,12 +76,14 @@
             android:id="@+id/userDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="ahaahaahaaha..."
-            android:layout_below="@+id/userAccountName"
             android:layout_alignLeft="@+id/userAccountName"
-            android:layout_alignStart="@+id/userAccountName"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignStart="@+id/userAccountName"
+            android:layout_below="@+id/userAccountName"
+            android:ellipsize="end"
+            android:maxLines="1"
+            tools:text="ahaahaahaaha"/>
 
         <TextView
             android:id="@+id/following_count"
@@ -90,9 +92,10 @@
             android:layout_alignLeft="@+id/userDescription"
             android:layout_alignStart="@+id/userDescription"
             android:layout_below="@+id/userDescription"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
+            android:maxLines="1"
+            android:textStyle="bold"
             tools:text="222"/>
-
 
         <TextView
             android:id="@+id/following"
@@ -105,6 +108,7 @@
             android:layout_toEndOf="@+id/following_count"
             android:layout_toRightOf="@+id/following_count"
             android:fontFamily="sans-serif-light"
+            android:maxLines="1"
             android:text=" FOLLOWING"/>
 
         <TextView
@@ -117,6 +121,8 @@
             android:layout_marginLeft="30dp"
             android:layout_toEndOf="@+id/following"
             android:layout_toRightOf="@+id/following"
+            android:maxLines="1"
+            android:textStyle="bold"
             tools:text="33"/>
 
         <TextView
@@ -128,6 +134,7 @@
             android:layout_toEndOf="@+id/follower_count"
             android:layout_toRightOf="@+id/follower_count"
             android:fontFamily="sans-serif-light"
+            android:maxLines="1"
             android:text=" FOLLOWERS"/>
 
     </RelativeLayout>

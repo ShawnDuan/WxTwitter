@@ -49,12 +49,12 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 	// i.e Display application "homepage"
 	@Override
 	public void onLoginSuccess() {
-		// Intent i = new Intent(this, PhotosActivity.class);
-		// startActivity(i);
 
 		final SharedPreferences defaultPref = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-		String username = defaultPref.getString(USER_NAME_PREF_KEY, null);
-		if (username == null) {
+		boolean userInfoStored = defaultPref.contains(USER_NAME_PREF_KEY);
+		if (userInfoStored) {
+			startMainActivity();
+		} else {
 			mClient = WxTwitterApplication.getRestClient();
 			mClient.getSelfUserInfo(new JsonHttpResponseHandler() {
 				@Override
@@ -75,8 +75,6 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 					super.onFailure(statusCode, headers, throwable, errorResponse);
 				}
 			});
-		} else {
-			startMainActivity();
 		}
 	}
 
