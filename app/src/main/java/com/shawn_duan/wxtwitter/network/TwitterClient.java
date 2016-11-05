@@ -1,14 +1,18 @@
 package com.shawn_duan.wxtwitter.network;
 
-import org.scribe.builder.api.Api;
-import org.scribe.builder.api.TwitterApi;
-
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+
+import org.scribe.builder.api.Api;
+import org.scribe.builder.api.TwitterApi;
+
+import static com.shawn_duan.wxtwitter.utils.Constants.USER_SCREEN_NAME_PREF_KEY;
 
 /*
  * 
@@ -23,6 +27,9 @@ import com.loopj.android.http.RequestParams;
  * 
  */
 public class TwitterClient extends OAuthBaseClient {
+	private final static String TAG = TwitterClient.class.getSimpleName();
+
+	private Context mContext;
 	public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class;
 	public static final String REST_URL = "https://api.twitter.com/1.1/";
 	public static final String REST_CONSUMER_KEY = "ol2xErDjBT05EBvC0hIo1t1GT";
@@ -31,6 +38,7 @@ public class TwitterClient extends OAuthBaseClient {
 
 	public TwitterClient(Context context) {
 		super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
+		mContext = context;
 	}
 
 	public void getHomeTimeLine(long sinceId, long maxId, int count, AsyncHttpResponseHandler handler) {
@@ -102,10 +110,22 @@ public class TwitterClient extends OAuthBaseClient {
 		getClient().post(apiUrl, params, handler);
 	}
 
-	public void getUserInfo(AsyncHttpResponseHandler handler) {
-		String apiUrl = getApiUrl("account/verify_credentials.json");
-		getClient().get(apiUrl, null, handler);
+	public void getUserInfo(String screenName, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("users/show.json");
+		RequestParams params = new RequestParams();
+		if (screenName == null || screenName.length() == 0) {
+			SharedPreferences defaultPref = PreferenceManager.getDefaultSharedPreferences(mContext);
+			screenName = defaultPref.getString(USER_SCREEN_NAME_PREF_KEY, "");
+		}
+		Log.d(TAG, "screenName: " + screenName);
+		params.put("screen_name", screenName);
+		getClient().get(apiUrl, params, handler);
 
 	}
 
-}
+	public void getSelfUserInfo(AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("account/verify_credentials.json");
+		getClient().get(apiUrl, null, handler);
+	}
+
+	}

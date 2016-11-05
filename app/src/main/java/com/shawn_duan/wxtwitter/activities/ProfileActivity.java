@@ -66,12 +66,13 @@ public class ProfileActivity extends AppCompatActivity {
         mClient = WxTwitterApplication.getRestClient();
 
         mUser = Parcels.unwrap(getIntent().getParcelableExtra(USER_KEY));
-        // if get user from intent, use it directly; if not, call
+        // if successfully get user from intent, use it directly; if not, get screenName, and call getUserInfo to get User.
         if (mUser != null) {
             mScreenName = mUser.getScreenName();
             updateContent(mUser);
         } else {
-            mClient.getUserInfo(new JsonHttpResponseHandler() {
+            mScreenName = getIntent().getStringExtra(SCREEN_NAME_KEY);
+            mClient.getUserInfo(mScreenName, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     mUser = User.fromJSONObject(response);

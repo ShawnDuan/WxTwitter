@@ -52,7 +52,7 @@
             android:layout_below="@id/userAvatar"
             android:gravity="bottom|left"
             android:maxLines="1"
-            android:text="userName"
+            tools:text="userName"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/black"
             android:textSize="15sp"
@@ -69,9 +69,19 @@
             android:fontFamily="sans-serif-light"
             android:gravity="bottom|left"
             android:maxLines="1"
-            android:text="userAccount"
             android:textColor="@color/colorPrimaryDark"
             tools:text="\@acountnameacountname"/>
+
+        <TextView
+            android:id="@+id/userDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="ahaahaahaaha..."
+            android:layout_below="@+id/userAccountName"
+            android:layout_alignLeft="@+id/userAccountName"
+            android:layout_alignStart="@+id/userAccountName"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
 
         <TextView
             android:id="@+id/following_count"
@@ -120,16 +130,6 @@
             android:fontFamily="sans-serif-light"
             android:text=" FOLLOWERS"/>
 
-        <TextView
-            android:id="@+id/userDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="ahaahaahaaha..."
-            android:layout_below="@+id/userAccountName"
-            android:layout_alignLeft="@+id/userAccountName"
-            android:layout_alignStart="@+id/userAccountName"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
     </RelativeLayout>
 
     <FrameLayout
