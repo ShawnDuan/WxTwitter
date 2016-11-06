@@ -1,7 +1,9 @@
 package com.shawn_duan.wxtwitter.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +18,9 @@ import android.view.MenuItem;
 import com.shawn_duan.wxtwitter.R;
 import com.shawn_duan.wxtwitter.fragments.ComposeTweetDialogFragment;
 import com.shawn_duan.wxtwitter.fragments.TabAndPagerFragment;
+
+import static com.shawn_duan.wxtwitter.utils.Constants.USER_PROFILE_IMAGE_URL_PREF_KEY;
+import static com.shawn_duan.wxtwitter.utils.Constants.USER_SCREEN_NAME_PREF_KEY;
 
 public class MainActivity extends AppCompatActivity {
     private final static String TAG = MainActivity.class.getSimpleName();
@@ -40,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addFragment(new ComposeTweetDialogFragment(), true);
+                addFragment(ComposeTweetDialogFragment.newInstance(), true);
             }
         });
 

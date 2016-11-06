@@ -1,5 +1,6 @@
 package com.shawn_duan.wxtwitter.fragments;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,6 +36,9 @@ import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 import cz.msebera.android.httpclient.Header;
 
+import static com.shawn_duan.wxtwitter.utils.Constants.REPLY_TO_TWEET_ID_KEY;
+import static com.shawn_duan.wxtwitter.utils.Constants.SCREEN_NAME_KEY;
+
 /**
  * Created by sduan on 10/30/16.
  */
@@ -41,7 +46,6 @@ import cz.msebera.android.httpclient.Header;
 public class ComposeTweetDialogFragment extends DialogFragment {
     private final static String TAG = ComposeTweetDialogFragment.class.getSimpleName();
 
-//    private MainActivity mActivity;
     private TwitterClient mClient;
 
     @BindView(R.id.etComposeBody)
@@ -54,15 +58,40 @@ public class ComposeTweetDialogFragment extends DialogFragment {
 
     private SharedPreferences mSharedPreferences;
     private String draft;
+    private long replyToTweetId;
+
+    public static ComposeTweetDialogFragment newInstance(long replyToTweetId, String replyToScreenName) {
+        ComposeTweetDialogFragment fragment = new ComposeTweetDialogFragment();
+        Bundle args = new Bundle();
+        args.putLong(REPLY_TO_TWEET_ID_KEY, replyToTweetId);
+        args.putString(SCREEN_NAME_KEY, replyToScreenName);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static ComposeTweetDialogFragment newInstance() {
+        return newInstance(0, null);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mClient = WxTwitterApplication.getRestClient();     // singleton client
-//        mActivity = (MainActivity) getActivity();
 
         mSharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        draft = mSharedPreferences.getString(getString(R.string.compose_draft), "");
+        String savedDraft = mSharedPreferences.getString("ComposeDraft", null);
+        Long savedReplyToTweetId = mSharedPreferences.getLong("ReplyTo", 0);
+
+        String replyToScreenName = getArguments().getString(SCREEN_NAME_KEY, null);
+        replyToTweetId = getArguments().getLong(REPLY_TO_TWEET_ID_KEY, 0);
+
+        if (replyToTweetId == savedReplyToTweetId) {
+            draft = (savedDraft == null || savedDraft.length() == 0) ? replyToScreenName + " " : savedDraft;
+        } else if (replyToTweetId != 0) {
+            draft = replyToScreenName + " ";
+        } else {
+            draft = "";
+        }
     }
 
     @Nullable
@@ -80,7 +109,7 @@ public class ComposeTweetDialogFragment extends DialogFragment {
         if (etComposeBody != null) {
             String content = etComposeBody.getText().toString();
 
-            mClient.composeTweet(content, new JsonHttpResponseHandler(){
+            mClient.composeTweet(content, replyToTweetId, new JsonHttpResponseHandler(){
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     Tweet newTweet = Tweet.fromJSONObject(response);
@@ -89,7 +118,7 @@ public class ComposeTweetDialogFragment extends DialogFragment {
                     Snackbar.make(etComposeBody, "Tweet submitted successfully!", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
 
-                    getActivity().onBackPressed();
+                    dismiss();
 
                     RxBus.getInstance().post(new InsertNewTweetEvent(newTweet));
                 }
@@ -121,13 +150,18 @@ public class ComposeTweetDialogFragment extends DialogFragment {
     public void onResume() {
         super.onResume();
         ((MainActivity)getActivity()).hideFab();
+        if (getDialog() != null) {
+            getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, (getResources().getDisplayMetrics().heightPixels / 2));
+        }
+
         Utils.showSoftKeyboard(getActivity(), etComposeBody);
     }
 
     @Override
     public void onPause() {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putString(getString(R.string.compose_draft), draft);
+        editor.putString("ComposeDraft", draft);
+        editor.putLong("ReplyTo", replyToTweetId);
         editor.commit();
 
         ((MainActivity)getActivity()).showFab();
@@ -141,4 +175,12 @@ public class ComposeTweetDialogFragment extends DialogFragment {
         super.onDestroyView();
     }
 
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+
+        // request a window without the title
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        return dialog;
+    }
 }

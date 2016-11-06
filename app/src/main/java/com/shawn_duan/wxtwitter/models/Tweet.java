@@ -19,6 +19,9 @@ public class Tweet {
     long uid;
     User user;
     String createAt;
+    int retweetCount;
+    int favouritesCount;
+    String replyToScreenName;
 
     public Tweet() {
 
@@ -32,6 +35,11 @@ public class Tweet {
             tweet.uid = jsonObject.getLong("id");
             tweet.user = User.fromJSONObject(jsonObject.getJSONObject("user"));
             tweet.createAt = DateUtils.getRelativeTimeAgo(jsonObject.getString("created_at"));
+            tweet.retweetCount = jsonObject.optInt("retweet_count");
+            tweet.favouritesCount = jsonObject.optInt("favourites_count");
+            if (!jsonObject.isNull("in_reply_to_screen_name")) {
+                tweet.replyToScreenName = jsonObject.getString("in_reply_to_screen_name");
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -68,5 +76,17 @@ public class Tweet {
 
     public String getCreateAt() {
         return createAt;
+    }
+
+    public int getRetweetCount() {
+        return retweetCount;
+    }
+
+    public int getFavouritesCount() {
+        return favouritesCount;
+    }
+
+    public String getReplyToScreenName() {
+        return replyToScreenName;
     }
 }

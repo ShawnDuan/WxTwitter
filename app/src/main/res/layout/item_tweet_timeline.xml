@@ -8,12 +8,38 @@
                 android:padding="6dp">
 
     <ImageView
+        android:id="@+id/note_reply_icon"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_alignBottom="@+id/note_text_in_reply_to"
+        android:layout_alignRight="@+id/userAvatar"
+        android:layout_alignTop="@+id/note_text_in_reply_to"
+        android:src="@drawable/ic_reply"/>
+
+    <TextView
+        android:id="@+id/note_text_in_reply_to"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/userName"
+        android:layout_toRightOf="@id/note_reply_icon"
+        android:fontFamily="sans-serif-light"
+        android:maxLines="1"
+        android:text="In reply to "/>
+
+    <TextView
+        android:id="@+id/note_reply_to_whom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/note_text_in_reply_to"
+        android:fontFamily="sans-serif-light"
+        android:maxLines="1"
+        tools:text="Ali Baba"/>
+
+    <ImageView
         android:id="@+id/userAvatar"
         android:layout_width="55dp"
         android:layout_height="55dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/note_reply_icon"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
         tools:background="@mipmap/ic_launcher"/>
@@ -22,7 +48,7 @@
         android:id="@+id/userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_alignTop="@id/userAvatar"
         android:layout_toEndOf="@+id/userAvatar"
         android:layout_toRightOf="@+id/userAvatar"
         android:gravity="bottom|left"
@@ -39,7 +65,6 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/tweetBody"
         android:layout_alignBottom="@+id/userName"
-        android:layout_alignParentTop="true"
         android:layout_marginLeft="5dp"
         android:layout_toEndOf="@+id/userName"
         android:layout_toLeftOf="@+id/tweetTime"
@@ -60,7 +85,6 @@
         android:layout_above="@+id/tweetBody"
         android:layout_alignBottom="@+id/userName"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
         android:layout_marginLeft="5dp"
         android:fontFamily="sans-serif-light"
         android:gravity="bottom|left"
@@ -79,7 +103,68 @@
         android:autoLink="all"
         android:fontFamily="sans-serif-light"
         android:linksClickable="true"
-        android:text="TextView"
         android:textColor="@color/black"
-        android:textSize="15sp"/>
+        android:textSize="15sp"
+        tools:text="If you're visiting this page, you're likely here because you're searching for a random sentence. Sometimes a random word just isn't enough, and that is where the random sentence generator comes into play. "/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tweetBody"
+        android:layout_alignRight="@id/tweetBody"
+        android:layout_below="@id/tweetBody"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
+
+        <ImageButton
+            android:id="@+id/ibReply"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/ic_reply"
+            android:scaleType="fitXY"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:id="@+id/ibRetweet"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/ic_retweet"
+            android:scaleType="fitXY"/>
+
+        <TextView
+            android:id="@+id/tvRetweetCount"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-light"
+            android:gravity="left|center_vertical"
+            android:maxLines="1"
+            android:paddingLeft="3dp"
+            tools:text="100"/>
+
+        <ImageButton
+            android:id="@+id/ibLike"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/ic_like"
+            android:scaleType="fitXY"/>
+
+
+        <TextView
+            android:id="@+id/tvFavouriteCount"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:fontFamily="sans-serif-light"
+            android:gravity="left|center_vertical"
+            android:maxLines="1"
+            android:paddingLeft="3dp"
+            tools:text="34"/>
+    </LinearLayout>
 </RelativeLayout>
