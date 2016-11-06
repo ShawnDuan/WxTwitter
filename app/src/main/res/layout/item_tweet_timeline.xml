@@ -107,12 +107,24 @@
         android:textSize="15sp"
         tools:text="If you're visiting this page, you're likely here because you're searching for a random sentence. Sometimes a random word just isn't enough, and that is where the random sentence generator comes into play. "/>
 
+    <ImageView
+        android:id="@+id/tweetMedia"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignLeft="@+id/tweetBody"
+        android:layout_alignRight="@id/tweetBody"
+        android:layout_below="@+id/tweetBody"
+        android:layout_marginTop="10dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        tools:background="@android:drawable/btn_star"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/tweetBody"
-        android:layout_alignRight="@id/tweetBody"
-        android:layout_below="@id/tweetBody"
+        android:layout_alignLeft="@id/tweetMedia"
+        android:layout_alignRight="@id/tweetMedia"
+        android:layout_below="@id/tweetMedia"
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingBottom="5dp"

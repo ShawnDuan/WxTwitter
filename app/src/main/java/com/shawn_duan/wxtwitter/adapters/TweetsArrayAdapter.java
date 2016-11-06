@@ -120,6 +120,8 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
         TextView tvTextInReplyTo;
         @BindView(R.id.note_reply_to_whom)
         TextView tvReplyToScreenName;
+        @BindView(R.id.tweetMedia)
+        ImageView ivMedia;
 
         Tweet tweetInHolder;
 
@@ -163,6 +165,16 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
                     mActivity.startActivity(intent);
                 }
             });
+
+            if (tweet.getMedia() != null && tweet.getMedia().getType().equals("photo")) {
+                ivMedia.setVisibility(View.VISIBLE);
+                Glide.with(mActivity)
+                        .load(tweet.getMedia().getMediaUrl())
+                        .into(ivMedia);
+            } else {
+                ivMedia.setVisibility(View.GONE);
+            }
+
 
             patternEditableBuilder.into(tvTweetBody);
         }

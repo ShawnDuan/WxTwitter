@@ -22,6 +22,7 @@ public class Tweet {
     int retweetCount;
     int favouritesCount;
     String replyToScreenName;
+    Media media;
 
     public Tweet() {
 
@@ -40,6 +41,14 @@ public class Tweet {
             if (!jsonObject.isNull("in_reply_to_screen_name")) {
                 tweet.replyToScreenName = jsonObject.getString("in_reply_to_screen_name");
             }
+            JSONObject entities = jsonObject.optJSONObject("entities");
+            if (entities != null) {
+                JSONArray mediaJsonArray = entities.optJSONArray("media");
+                if (mediaJsonArray != null && mediaJsonArray.length() > 0) {
+                    tweet.media = Media.fromJSONObject(mediaJsonArray.getJSONObject(0));
+                }
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -88,5 +97,9 @@ public class Tweet {
 
     public String getReplyToScreenName() {
         return replyToScreenName;
+    }
+
+    public Media getMedia() {
+        return media;
     }
 }
