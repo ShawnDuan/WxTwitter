@@ -85,12 +85,14 @@ public class ComposeTweetDialogFragment extends DialogFragment {
         String replyToScreenName = getArguments().getString(SCREEN_NAME_KEY, null);
         replyToTweetId = getArguments().getLong(REPLY_TO_TWEET_ID_KEY, 0);
 
-        if (replyToTweetId == savedReplyToTweetId) {
-            draft = (savedDraft == null || savedDraft.length() == 0) ? replyToScreenName + " " : savedDraft;
-        } else if (replyToTweetId != 0) {
-            draft = replyToScreenName + " ";
-        } else {
+        if (replyToTweetId == savedReplyToTweetId
+                && savedDraft != null
+                && savedDraft.length() > 0) {
+            draft = savedDraft;
+        } else if (replyToTweetId == 0) {
             draft = "";
+        } else {
+            draft = replyToScreenName + " ";
         }
     }
 
@@ -109,7 +111,7 @@ public class ComposeTweetDialogFragment extends DialogFragment {
         if (etComposeBody != null) {
             String content = etComposeBody.getText().toString();
 
-            mClient.composeTweet(content, replyToTweetId, new JsonHttpResponseHandler(){
+            mClient.composeTweet(content, replyToTweetId, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     Tweet newTweet = Tweet.fromJSONObject(response);
@@ -149,7 +151,7 @@ public class ComposeTweetDialogFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity)getActivity()).hideFab();
+        ((MainActivity) getActivity()).hideFab();
         if (getDialog() != null) {
             getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, (getResources().getDisplayMetrics().heightPixels / 2));
         }
@@ -164,7 +166,7 @@ public class ComposeTweetDialogFragment extends DialogFragment {
         editor.putLong("ReplyTo", replyToTweetId);
         editor.commit();
 
-        ((MainActivity)getActivity()).showFab();
+        ((MainActivity) getActivity()).showFab();
         Utils.hideSoftKeyboard(getActivity(), etComposeBody);
         super.onPause();
     }
