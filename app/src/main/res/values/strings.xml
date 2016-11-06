@@ -2,6 +2,6 @@
     <string name="app_name">WxTwitter</string>
     <string name="action_profile">Profile</string>
 
-    <string name="timeline_title">TimeLine</string>
+    <string name="timeline_title">Timeline</string>
     <string name="compose_hint">What\'s happening?</string>
 </resources>

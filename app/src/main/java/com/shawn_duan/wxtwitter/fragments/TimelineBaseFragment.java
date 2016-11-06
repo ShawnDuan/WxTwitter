@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.shawn_duan.wxtwitter.R;
 import com.shawn_duan.wxtwitter.WxTwitterApplication;
@@ -18,6 +19,8 @@ import com.shawn_duan.wxtwitter.models.Tweet;
 import com.shawn_duan.wxtwitter.network.TwitterClient;
 import com.shawn_duan.wxtwitter.utils.DividerItemDecoration;
 import com.shawn_duan.wxtwitter.utils.EndlessRecyclerViewScrollListener;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,15 +33,15 @@ import butterknife.Unbinder;
  * Created by sduan on 11/3/16.
  */
 
-public abstract class TweetsListBaseFragment extends Fragment {
-    private final static String TAG = TweetsListBaseFragment.class.getSimpleName();
+public abstract class TimelineBaseFragment extends Fragment {
+    private final static String TAG = TimelineBaseFragment.class.getSimpleName();
 
     final static int NORMAL_POPULATE_AMOUNT = 25;
     final static long NOT_APPLICABLE = 0;
 
     @BindView(R.id.swipContainer)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.rcTimeLine)
+    @BindView(R.id.rcTimeline)
     RecyclerView mRecyclerView;
 
     TwitterClient mClient;
@@ -112,6 +115,49 @@ public abstract class TweetsListBaseFragment extends Fragment {
                 populateTimeline(NOT_APPLICABLE, mOldestId, NORMAL_POPULATE_AMOUNT);
             }
         });
+    }
+
+    protected void handleResponseArray(JSONArray jsonArray, boolean addToBottom) {
+        int newTweetCount = jsonArray.length();
+        int originalSize = mTweetList.size();
+
+        if (addToBottom) {
+            mTweetList.addAll(Tweet.fromJSONArray(jsonArray));
+            mAdapter.notifyItemRangeInserted(originalSize + 1, newTweetCount);
+        } else {
+            mTweetList.addAll(0, Tweet.fromJSONArray(jsonArray));
+            mAdapter.notifyItemRangeInserted(0, newTweetCount);
+        }
+
+        // update max/since id based on the current TweetList
+        if (mTweetList.size() > 0) {
+            mNewestId = mTweetList.get(0).getUid();
+            mOldestId = mTweetList.get(mTweetList.size() - 1).getUid();
+        } else {
+            mNewestId = NOT_APPLICABLE;
+            mOldestId = NOT_APPLICABLE;
+        }
+
+        if (!addToBottom) {
+            mRecyclerView.smoothScrollToPosition(0);
+        }
+
+        Log.d(TAG, "Amount of new tweets added into timeline: " + newTweetCount);
+
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    protected void handleError(int statusCode) {
+        if (statusCode == 429) {
+            Toast.makeText(getActivity(),
+                    "Request number meets the limit, please wait for 15mins before retry.",
+                    Toast.LENGTH_SHORT).show();
+        }
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
 }
