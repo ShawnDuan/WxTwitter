@@ -9,54 +9,62 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.shawn_duan.wxtwitter.models.Tweet;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
-import static com.shawn_duan.wxtwitter.utils.Constants.SCREEN_NAME_KEY;
+import static com.shawn_duan.wxtwitter.utils.Constants.TAG_KEY;
 
 /**
- * Created by sduan on 11/3/16.
+ * Created by sduan on 11/5/16.
  */
 
-public class UserTimelineFragment extends TweetsListBaseFragment {
-    private final static String TAG = UserTimelineFragment.class.getSimpleName();
+public class TagsTimelineFragment extends TweetsListBaseFragment {
 
-    private String mScreenName;
+    private final static String TAG = TagsTimelineFragment.class.getSimpleName();
 
-    public static UserTimelineFragment newInstance(String screenName) {
-        UserTimelineFragment userTimelineFragment = new UserTimelineFragment();
+    private String mTag;
+
+    public static TagsTimelineFragment newInstance(String tag) {
+        TagsTimelineFragment tagsTimelineFragment = new TagsTimelineFragment();
         Bundle args = new Bundle();
-        args.putString(SCREEN_NAME_KEY, screenName);
-        userTimelineFragment.setArguments(args);
-        return userTimelineFragment;
+        args.putString(TAG_KEY, tag);
+        tagsTimelineFragment.setArguments(args);
+        return tagsTimelineFragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mScreenName = getArguments().getString(SCREEN_NAME_KEY);
+        mTag = getArguments().getString(TAG_KEY);
     }
 
     @Override
     protected void populateTimeline(final long sinceId, final long maxId, final int count) {
-        Log.d(TAG, "populateTimeLine(), screenName: " + mScreenName + ", sinceId: " + sinceId + ", maxId: " + maxId + ", count: " + count);
-
-        mClient.getUserTimeline(mScreenName, sinceId, maxId, count, new JsonHttpResponseHandler() {
+        Log.d(TAG, "populateTimeLine(), mTag, " + mTag + ", sinceId: " + sinceId + ", maxId: " + maxId + ", count: " + count);
+        mClient.getSearchResult(mTag, sinceId, maxId, count, new JsonHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 // Deserialize Json
                 // Create models
                 // Load the model
+                JSONArray jsonArray = null;
+                try {
+                    jsonArray = response.getJSONArray("statuses");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return;
+                }
                 boolean addToBottom = (maxId != NOT_APPLICABLE);
                 int newTweetCount = response.length();
                 int originalSize = mTweetList.size();
 
                 if (addToBottom) {
-                    mTweetList.addAll(Tweet.fromJSONArray(response));
+                    mTweetList.addAll(Tweet.fromJSONArray(jsonArray));
                     mAdapter.notifyItemRangeInserted(originalSize + 1, newTweetCount);
                 } else {
-                    mTweetList.addAll(0, Tweet.fromJSONArray(response));
+                    mTweetList.addAll(0, Tweet.fromJSONArray(jsonArray));
                     mAdapter.notifyItemRangeInserted(0, newTweetCount);
                 }
 

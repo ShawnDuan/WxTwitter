@@ -82,7 +82,7 @@
             android:layout_alignStart="@+id/userAccountName"
             android:layout_below="@+id/userAccountName"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:maxLines="4"
             tools:text="ahaahaahaaha"/>
 
         <TextView

@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.scribe.builder.api.Api;
@@ -128,4 +129,24 @@ public class TwitterClient extends OAuthBaseClient {
 		getClient().get(apiUrl, null, handler);
 	}
 
+	public void getSearchResult(String query, long sinceId, long maxId, int count, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("search/tweets.json");
+		RequestParams params = new RequestParams();
+		if (sinceId > 0) {
+			params.put("since_id", sinceId);
+		}
+		if (maxId > 0) {
+			params.put("max_id", maxId - 1);
+		}
+		// unlimited if count = -1
+		if (count > 0) {
+			params.put("count", count);
+		}
+		if (query == null || query.length() <= 0) {
+			return;
+		} else {
+			params.put("q", query);
+		}
+		getClient().get(apiUrl, params, handler);
 	}
+}

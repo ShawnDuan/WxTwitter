@@ -8,6 +8,7 @@ public class Constants {
 
     public final static String SCREEN_NAME_KEY = "screenName";
     public final static String USER_KEY = "user";
+    public final static String TAG_KEY = "tag";
 
     public final static String USER_NAME_PREF_KEY = "user_name";
     public final static String USER_SCREEN_NAME_PREF_KEY = "user_screen_name";

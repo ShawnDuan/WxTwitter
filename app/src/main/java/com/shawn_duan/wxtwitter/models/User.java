@@ -10,13 +10,13 @@ import org.parceler.Parcel;
 
 @Parcel
 public class User {
-    private String name;
-    private long uid;
-    private String screenName;
-    private String profileImageUrl;
-    private int followersCount;
-    private int followingsCount;
-    private String description;
+    String name;
+    long uid;
+    String screenName;
+    String profileImageUrl;
+    int followersCount;
+    int followingsCount;
+    String description;
 
     public static User fromJSONObject(JSONObject jsonObject) {
         User user = new User();
