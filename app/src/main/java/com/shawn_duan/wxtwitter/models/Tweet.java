@@ -37,7 +37,7 @@ public class Tweet {
             tweet.user = User.fromJSONObject(jsonObject.getJSONObject("user"));
             tweet.createAt = DateUtils.getRelativeTimeAgo(jsonObject.getString("created_at"));
             tweet.retweetCount = jsonObject.optInt("retweet_count");
-            tweet.favouritesCount = jsonObject.optInt("favourites_count");
+            tweet.favouritesCount = jsonObject.optInt("favorite_count");
             if (!jsonObject.isNull("in_reply_to_screen_name")) {
                 tweet.replyToScreenName = jsonObject.getString("in_reply_to_screen_name");
             }

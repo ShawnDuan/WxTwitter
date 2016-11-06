@@ -137,7 +137,9 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
             tvTweetBody.setText(tweet.getBody());
             tvTweetTime.setText(tweet.getCreateAt());
             tvRetweetCount.setText(String.valueOf(tweet.getRetweetCount()));
+            tvRetweetCount.setVisibility((tweet.getRetweetCount() == 0) ? View.INVISIBLE : View.VISIBLE);
             tvFavourite.setText(String.valueOf(tweet.getFavouritesCount()));
+            tvFavourite.setVisibility((tweet.getFavouritesCount() == 0) ? View.INVISIBLE : View.VISIBLE);
             ivUserAvatar.setImageResource(android.R.color.transparent);
 
             String replyToScreenName = tweet.getReplyToScreenName();
