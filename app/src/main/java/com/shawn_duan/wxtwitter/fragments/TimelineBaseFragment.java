@@ -19,6 +19,7 @@ import com.shawn_duan.wxtwitter.models.Tweet;
 import com.shawn_duan.wxtwitter.network.TwitterClient;
 import com.shawn_duan.wxtwitter.utils.DividerItemDecoration;
 import com.shawn_duan.wxtwitter.utils.EndlessRecyclerViewScrollListener;
+import com.shawn_duan.wxtwitter.utils.NetworkUtils;
 
 import org.json.JSONArray;
 
@@ -73,15 +74,10 @@ public abstract class TimelineBaseFragment extends Fragment {
         return view;
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-    }
-
-    public void appendTweets(List<Tweet> tweets) {
-        // add tweets to the adapter
     }
 
     // Abstract method to be overridden
@@ -93,6 +89,9 @@ public abstract class TimelineBaseFragment extends Fragment {
             @Override
             public void onRefresh() {
                 populateTimeline(mNewestId, NOT_APPLICABLE, (int) NOT_APPLICABLE);
+                if (!NetworkUtils.isNetworkAvailable(getActivity())) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
             }
         });
         mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
