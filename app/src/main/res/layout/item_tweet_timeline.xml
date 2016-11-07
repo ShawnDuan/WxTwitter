@@ -93,7 +93,7 @@
         android:textColor="@color/colorPrimaryDark"/>
 
 
-    <TextView
+    <com.shawn_duan.wxtwitter.utils.LinkifiedTextView
         android:id="@+id/tweetBody"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
