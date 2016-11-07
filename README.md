@@ -28,7 +28,7 @@ The following **optional** features are implemented:
   * [X] The user that wrote the original tweet is automatically "@" replied in compose
 * [X] User can click on a tweet to be **taken to a "detail view"** of that tweet
  * [X] User can take favorite (and unfavorite) or retweet actions on a tweet
-* [ ] Improve the user interface and theme the app to feel twitter branded
+* [X] Improve the user interface and theme the app to feel twitter branded
 * [X] User can **search for tweets matching a particular query** and see results
 * [X] Usernames and hashtags are styled and clickable within tweets [using clickable spans](http://guides.codepath.com/android/Working-with-the-TextView#creating-clickable-styled-spans)
 

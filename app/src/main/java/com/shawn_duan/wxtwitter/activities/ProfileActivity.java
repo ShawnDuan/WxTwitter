@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.shawn_duan.wxtwitter.R;
 import com.shawn_duan.wxtwitter.WxTwitterApplication;
+import com.shawn_duan.wxtwitter.fragments.ComposeTweetDialogFragment;
 import com.shawn_duan.wxtwitter.fragments.UserTimelineFragment;
 import com.shawn_duan.wxtwitter.models.User;
 import com.shawn_duan.wxtwitter.network.TwitterClient;
@@ -124,8 +125,8 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_profile) {
-
+        if (id == R.id.action_compose) {
+            ComposeTweetDialogFragment.newInstance().show(getSupportFragmentManager(), "ComposeTweetDialogFragment");
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar_container"
-        android:paddingBottom="10dp"
+        android:background="@color/white"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:paddingTop="10dp">
@@ -70,6 +70,7 @@
             android:gravity="bottom|left"
             android:maxLines="1"
             android:textColor="@color/colorPrimaryDark"
+            android:textSize="12sp"
             tools:text="\@acountnameacountname"/>
 
         <TextView
@@ -83,6 +84,7 @@
             android:layout_below="@+id/userAccountName"
             android:ellipsize="end"
             android:maxLines="4"
+            android:textColor="@color/black"
             tools:text="ahaahaahaaha"/>
 
         <TextView
@@ -94,6 +96,7 @@
             android:layout_below="@+id/userDescription"
             android:layout_marginTop="10dp"
             android:maxLines="1"
+            android:textColor="@color/black"
             android:textStyle="bold"
             tools:text="222"/>
 
@@ -122,6 +125,7 @@
             android:layout_toEndOf="@+id/following"
             android:layout_toRightOf="@+id/following"
             android:maxLines="1"
+            android:textColor="@color/black"
             android:textStyle="bold"
             tools:text="33"/>
 
@@ -136,6 +140,13 @@
             android:fontFamily="sans-serif-light"
             android:maxLines="1"
             android:text=" FOLLOWERS"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/following_count"
+            android:layout_marginTop="5dp"
+            android:background="@color/light_grey"/>
 
     </RelativeLayout>
 
