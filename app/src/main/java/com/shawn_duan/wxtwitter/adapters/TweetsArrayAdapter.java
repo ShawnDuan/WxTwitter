@@ -19,6 +19,7 @@ import com.shawn_duan.wxtwitter.R;
 import com.shawn_duan.wxtwitter.activities.MainActivity;
 import com.shawn_duan.wxtwitter.activities.ProfileActivity;
 import com.shawn_duan.wxtwitter.activities.TagTimelineActivity;
+import com.shawn_duan.wxtwitter.activities.TweetDetailActivity;
 import com.shawn_duan.wxtwitter.fragments.ComposeTweetDialogFragment;
 import com.shawn_duan.wxtwitter.models.Tweet;
 import com.shawn_duan.wxtwitter.models.User;
@@ -92,7 +93,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
         return mTweetList.size();
     }
 
-    public class TweetsViewHolder extends RecyclerView.ViewHolder {
+    public class TweetsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.userAvatar)
         ImageView ivUserAvatar;
@@ -128,6 +129,8 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
         public TweetsViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(TweetsViewHolder.this, itemView);
+
+            itemView.setOnClickListener(this);
         }
 
         public void setTweet(final Tweet tweet) {
@@ -177,8 +180,18 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
                 ivMedia.setVisibility(View.GONE);
             }
 
-
             patternEditableBuilder.into(tvTweetBody);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition(); // gets item position
+            if (position != RecyclerView.NO_POSITION) { // Check if an item was deleted, but the user clicked it before the UI removed it
+                Tweet tweet = mTweetList.get(position);
+                Intent intent = new Intent(mActivity, TweetDetailActivity.class);
+                intent.putExtra("tweet", Parcels.wrap(tweet));
+                mActivity.startActivity(intent);
+            }
         }
 
         @OnClick(R.id.ibReply)

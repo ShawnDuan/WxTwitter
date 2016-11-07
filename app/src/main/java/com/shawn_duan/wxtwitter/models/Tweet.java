@@ -5,6 +5,7 @@ import com.shawn_duan.wxtwitter.utils.DateUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
  * Created by sduan on 10/29/16.
  */
 
+@Parcel
 public class Tweet {
 
     String body;

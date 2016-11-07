@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/toolbar_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:elevation="0dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/TimelineLightToolbar"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:titleTextAppearance="@style/Toolbar.TitleText"/>
+    </android.support.design.widget.AppBarLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:padding="6dp">
+
+            <ImageView
+                android:id="@+id/note_reply_icon"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_alignBottom="@+id/note_text_in_reply_to"
+                android:layout_alignRight="@+id/userAvatar"
+                android:layout_alignTop="@+id/note_text_in_reply_to"
+                android:src="@drawable/ic_reply"/>
+
+            <TextView
+                android:id="@+id/note_text_in_reply_to"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/userName"
+                android:layout_toRightOf="@id/note_reply_icon"
+                android:fontFamily="sans-serif-light"
+                android:maxLines="1"
+                android:text="In reply to "/>
+
+            <TextView
+                android:id="@+id/note_reply_to_whom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/note_text_in_reply_to"
+                android:fontFamily="sans-serif-light"
+                android:maxLines="1"
+                tools:text="Ali Baba"/>
+
+            <ImageView
+                android:id="@+id/userAvatar"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_below="@id/note_reply_icon"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                tools:background="@mipmap/ic_launcher"/>
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/userAvatar"
+                android:layout_toEndOf="@+id/userAvatar"
+                android:layout_toRightOf="@+id/userAvatar"
+                android:gravity="bottom|left"
+                android:maxLines="1"
+                android:text="userName"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/userAccountName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/userName"
+                android:layout_toEndOf="@+id/userAvatar"
+                android:layout_toRightOf="@+id/userAvatar"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-light"
+                android:gravity="bottom|left"
+                android:maxLines="1"
+                android:text="userAccount"
+                android:textColor="@color/colorPrimaryDark"
+                tools:text="\@acountnameacountname"/>
+
+            <ImageView
+                android:id="@+id/tweetMedia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tweetBody"
+                android:layout_alignRight="@id/tweetBody"
+                android:layout_below="@+id/tweetBody"
+                android:layout_marginTop="10dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                tools:background="@drawable/placeholder"
+                tools:layout_height="150dp"/>
+
+            <TextView
+                android:id="@+id/tweetTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tweetBody"
+                android:layout_below="@id/tweetMedia"
+                android:fontFamily="sans-serif-light"
+                tools:text="10:20am 06 Nov 16"/>
+
+            <LinearLayout
+                android:id="@+id/action_buttons_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tweetMedia"
+                android:layout_alignRight="@id/tweetMedia"
+                android:layout_below="@id/tweetTime"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp">
+
+                <ImageButton
+                    android:id="@+id/ibReply"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/ic_reply"
+                    android:scaleType="fitXY"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+
+                <ImageButton
+                    android:id="@+id/ibRetweet"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/ic_retweet"
+                    android:scaleType="fitXY"/>
+
+                <TextView
+                    android:id="@+id/tvRetweetCount"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="left|center_vertical"
+                    android:maxLines="1"
+                    android:paddingLeft="3dp"
+                    tools:text="100"/>
+
+                <ImageButton
+                    android:id="@+id/ibLike"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/ic_like"
+                    android:scaleType="fitXY"/>
+
+                <TextView
+                    android:id="@+id/tvFavouriteCount"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-light"
+                    android:gravity="left|center_vertical"
+                    android:maxLines="1"
+                    android:paddingLeft="3dp"
+                    tools:text="34"/>
+
+                <ImageButton
+                    android:id="@+id/ibShare"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/ic_share"/>
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/etReplyContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/action_buttons_container"
+                android:hint="Reply to ..."/>
+
+            <TextView
+                android:id="@+id/tweetBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/userAvatar"
+                android:autoLink="all"
+                android:fontFamily="sans-serif-light"
+                android:linksClickable="true"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                tools:text="If you're visiting this page, you're likely here because you're searching for a random sentence. Sometimes a random word just isn't enough, and that is where the random sentence generator comes into play. "/>
+
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>

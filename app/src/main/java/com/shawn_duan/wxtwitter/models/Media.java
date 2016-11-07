@@ -1,14 +1,14 @@
 package com.shawn_duan.wxtwitter.models;
 
-import com.shawn_duan.wxtwitter.utils.DateUtils;
-
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 /**
  * Created by sduan on 11/6/16.
  */
 
+@Parcel
 public class Media {
     long id;
     String mediaUrl;
