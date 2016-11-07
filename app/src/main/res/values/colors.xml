@@ -5,6 +5,9 @@
     <color name="colorPrimaryLight">#56cffa</color>
     <color name="colorAccent">#1DA1F2</color>
 
+    <color name="retweet_green">#2ecc71</color>
+    <color name="favorite_red">#e74c3c</color>
+
     <color name="yellow">#FFFF00</color>
     <color name="duskYellow">#f9b61a</color>
     <color name="orange">#FFA500</color>

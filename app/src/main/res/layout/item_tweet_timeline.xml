@@ -161,7 +161,7 @@
             tools:text="100"/>
 
         <ImageButton
-            android:id="@+id/ibLike"
+            android:id="@+id/ibFavorite"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:background="@drawable/ic_like"

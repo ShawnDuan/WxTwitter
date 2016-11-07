@@ -15,7 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.shawn_duan.wxtwitter.R;
+import com.shawn_duan.wxtwitter.WxTwitterApplication;
 import com.shawn_duan.wxtwitter.activities.MainActivity;
 import com.shawn_duan.wxtwitter.activities.ProfileActivity;
 import com.shawn_duan.wxtwitter.activities.TagTimelineActivity;
@@ -23,8 +25,10 @@ import com.shawn_duan.wxtwitter.activities.TweetDetailActivity;
 import com.shawn_duan.wxtwitter.fragments.ComposeTweetDialogFragment;
 import com.shawn_duan.wxtwitter.models.Tweet;
 import com.shawn_duan.wxtwitter.models.User;
+import com.shawn_duan.wxtwitter.network.TwitterClient;
 import com.shawn_duan.wxtwitter.utils.PatternEditableBuilder;
 
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.util.List;
@@ -33,6 +37,7 @@ import java.util.regex.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cz.msebera.android.httpclient.Header;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 import static com.shawn_duan.wxtwitter.utils.Constants.SCREEN_NAME_KEY;
@@ -47,13 +52,14 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
 
     private Activity mActivity;
     private List<Tweet> mTweetList;
-
+    private TwitterClient mClient;
 
     private PatternEditableBuilder patternEditableBuilder;
 
     public TweetsArrayAdapter(Activity activity, List<Tweet> tweets) {
         mActivity = activity;
         mTweetList = tweets;
+        mClient = WxTwitterApplication.getRestClient();
 
         patternEditableBuilder = new PatternEditableBuilder()
                 .addPattern(Pattern.compile("\\@(\\w+)"), mActivity.getResources().getColor(R.color.colorAccent),
@@ -109,12 +115,12 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
         ImageButton ibReply;
         @BindView(R.id.ibRetweet)
         ImageButton ibRetweet;
-        @BindView(R.id.ibLike)
-        ImageButton ibLike;
+        @BindView(R.id.ibFavorite)
+        ImageButton ibFavorite;
         @BindView(R.id.tvRetweetCount)
         TextView tvRetweetCount;
         @BindView(R.id.tvFavouriteCount)
-        TextView tvFavourite;
+        TextView tvFavouriteCount;
         @BindView(R.id.note_reply_icon)
         ImageView ivNoteReplyIcon;
         @BindView(R.id.note_text_in_reply_to)
@@ -141,8 +147,8 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
             tvTweetTime.setText(tweet.getCreateAt());
             tvRetweetCount.setText(String.valueOf(tweet.getRetweetCount()));
             tvRetweetCount.setVisibility((tweet.getRetweetCount() == 0) ? View.INVISIBLE : View.VISIBLE);
-            tvFavourite.setText(String.valueOf(tweet.getFavouritesCount()));
-            tvFavourite.setVisibility((tweet.getFavouritesCount() == 0) ? View.INVISIBLE : View.VISIBLE);
+            tvFavouriteCount.setText(String.valueOf(tweet.getFavouritesCount()));
+            tvFavouriteCount.setVisibility((tweet.getFavouritesCount() == 0) ? View.INVISIBLE : View.VISIBLE);
             ivUserAvatar.setImageResource(android.R.color.transparent);
 
             String replyToScreenName = tweet.getReplyToScreenName();
@@ -181,6 +187,51 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
             }
 
             patternEditableBuilder.into(tvTweetBody);
+
+            ibFavorite.setBackground(mActivity.getResources().getDrawable(tweet.getIsFavorited() ? R.drawable.ic_like_red : R.drawable.ic_like));
+            ibFavorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final boolean isFavorited = tweet.getIsFavorited();
+                    final boolean newState = !isFavorited;
+                    mClient.setTweetFavorite(newState, tweet.getUid(), new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            Toast.makeText(mActivity, "Set favorite to " + newState, Toast.LENGTH_SHORT).show();
+                            tweet.setIsFavorited(newState);
+                            ibFavorite.setBackground(mActivity.getResources().getDrawable(newState ? R.drawable.ic_like_red : R.drawable.ic_like));
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                        }
+                    });
+
+                }
+            });
+
+            ibRetweet.setBackground(mActivity.getResources().getDrawable(tweet.getIsRetweeted() ? R.drawable.ic_retweet_green : R.drawable.ic_retweet));
+            ibRetweet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final boolean isRetweeted = tweet.getIsRetweeted();
+                    final boolean newState = !isRetweeted;
+                    mClient.setTweetRetweet(newState, tweet.getUid(), new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            Toast.makeText(mActivity, "Set retweeted to " + newState, Toast.LENGTH_SHORT).show();
+                            tweet.setIsRetweeted(newState);
+                            ibRetweet.setBackground(mActivity.getResources().getDrawable(tweet.getIsRetweeted() ? R.drawable.ic_retweet_green : R.drawable.ic_retweet));
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                        }
+                    });
+                }
+            });
         }
 
         @Override

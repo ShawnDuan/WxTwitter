@@ -25,6 +25,8 @@ public class Tweet {
     int favouritesCount;
     String replyToScreenName;
     Media media;
+    boolean isFavorited;
+    boolean isRetweeted;
 
     public Tweet() {
 
@@ -40,6 +42,8 @@ public class Tweet {
             tweet.createAt = DateUtils.getRelativeTimeAgo(jsonObject.getString("created_at"));
             tweet.retweetCount = jsonObject.optInt("retweet_count");
             tweet.favouritesCount = jsonObject.optInt("favorite_count");
+            tweet.isFavorited = jsonObject.optBoolean("favorited");
+            tweet.isRetweeted = jsonObject.optBoolean("retweeted");
             if (!jsonObject.isNull("in_reply_to_screen_name")) {
                 tweet.replyToScreenName = jsonObject.getString("in_reply_to_screen_name");
             }
@@ -104,4 +108,22 @@ public class Tweet {
     public Media getMedia() {
         return media;
     }
+
+    public boolean getIsFavorited() {
+        return isFavorited;
+    }
+
+    public void setIsFavorited(boolean favorited) {
+        isFavorited = favorited;
+    }
+
+
+    public boolean getIsRetweeted() {
+        return isRetweeted;
+    }
+
+    public void setIsRetweeted(boolean retweeted) {
+        isRetweeted = retweeted;
+    }
+
 }

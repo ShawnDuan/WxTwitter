@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
@@ -22,9 +23,11 @@
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:titleTextAppearance="@style/Toolbar.TitleText"/>
     </android.support.design.widget.AppBarLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -162,10 +165,11 @@
                     android:gravity="left|center_vertical"
                     android:maxLines="1"
                     android:paddingLeft="3dp"
+                    android:textColor="@color/retweet_green"
                     tools:text="100"/>
 
                 <ImageButton
-                    android:id="@+id/ibLike"
+                    android:id="@+id/ibFavorite"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:background="@drawable/ic_like"
@@ -180,6 +184,7 @@
                     android:gravity="left|center_vertical"
                     android:maxLines="1"
                     android:paddingLeft="3dp"
+                    android:textColor="@color/favorite_red"
                     tools:text="34"/>
 
                 <ImageButton
